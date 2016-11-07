@@ -1,9 +1,8 @@
 package com.microservice.training.controller;
 
-import com.microservice.training.integration.EventCompositeGateway;
-import com.microservice.training.hal.HALResponse;
+import com.microservice.training.gateway.EventCompositeGateway;
 import com.microservice.training.model.Event;
-import com.microservice.training.model.EventAggregated;
+import com.microservice.training.resource.EventAggregated;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.ResourceSupport;
@@ -30,9 +29,9 @@ public class EventCompositeController {
 
     @GetMapping(path = "/", produces = {HAL_JSON_VALUE, APPLICATION_JSON_VALUE, APPLICATION_JSON_UTF8_VALUE})
     public HttpEntity<ResourceSupport> root() {
-        ResourceSupport halResponse = new ResourceSupport();
-        halResponse.add(new Link(new UriTemplate(linkTo(EventCompositeController.class, "").toString() + "/{eventId}"), "event"));
-        return new ResponseEntity<>(halResponse, HttpStatus.OK);
+        ResourceSupport resourceSupport = new ResourceSupport();
+        resourceSupport.add(new Link(new UriTemplate(linkTo(EventCompositeController.class, "").toString() + "/{eventId}"), "event"));
+        return new ResponseEntity<>(resourceSupport, HttpStatus.OK);
     }
 
     @GetMapping(path = "/{eventId}", produces = {HAL_JSON_VALUE, APPLICATION_JSON_VALUE, APPLICATION_JSON_UTF8_VALUE})

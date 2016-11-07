@@ -1,15 +1,10 @@
-package com.microservice.training.integration;
+package com.microservice.training.gateway;
 
 import com.microservice.training.model.Event;
-import com.microservice.training.model.Recommendation;
-import com.microservice.training.model.Review;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -17,7 +12,6 @@ import org.springframework.web.client.RestOperations;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Component

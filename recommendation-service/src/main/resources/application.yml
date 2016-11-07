@@ -1,9 +1,12 @@
 eureka:
   client:
+    registryFetchIntervalSeconds: 5
+    leaseRenewalIntervalInSeconds: 5
     serviceUrl:
       defaultZone: http://localhost:8010/eureka/
+      
 server:
-  port: ${PORT:${SERVER_PORT:0}}   # Select any available port if neither port nor server port are specified.
+  port: ${PORT:${SERVER_PORT:9020}}
 
 ---
 spring:
@@ -14,10 +17,7 @@ server:
 
 eureka:
   instance:
-      preferIpAddress: true
+    preferIpAddress: true
   client:
-    registryFetchIntervalSeconds: 5
-    instanceInfoReplicationIntervalSeconds: 5
-    initialInstanceInfoReplicationIntervalSeconds: 5
     serviceUrl:
       defaultZone: http://eureka-server:8010/eureka/

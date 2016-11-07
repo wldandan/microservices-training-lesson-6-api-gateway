@@ -1,6 +1,7 @@
-package com.microservice.training.model;
+package com.microservice.training.resource;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.microservice.training.model.Event;
 import org.springframework.hateoas.ResourceSupport;
 
 import java.util.Date;

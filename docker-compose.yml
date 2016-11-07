@@ -1,0 +1,52 @@
+version: '2'
+services:
+  mongo:
+    image: mongo
+  eureka-server:
+    build: eureka-server
+    restart: always
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+    ports:
+      - "8010:8010"
+  event-service:
+    build: event-service
+    restart: always
+    command: bash -c "wait-for-it -t 0 eureka-server:8010 && java -jar /app/event-service-latest.jar"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+    ports:
+      - "9000:9000"
+    depends_on:
+      - mongo
+      - eureka-server
+  review-service:
+    build: review-service
+    restart: always
+    command: bash -c "wait-for-it -t 0 eureka-server:8010 && java -jar /app/review-service-latest.jar"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+    ports:
+      - "9010:9010"
+    depends_on:
+      - eureka-server
+  recommendation-service:
+    build: recommendation-service
+    restart: always
+    command: bash -c "wait-for-it eureka-server:8010 && java -jar /app/recommendation-service-latest.jar"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+    ports:
+      - "9020:9020"
+    depends_on:
+      - eureka-server
+  event-composite-service:
+    build: event-composite-service
+    restart: always
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+    command: bash -c "wait-for-it -t 0 eureka-server:8010 && java -jar /app/event-composite-service-latest.jar"
+    ports:
+      - "9030:9030"
+    depends_on:
+      - eureka-server

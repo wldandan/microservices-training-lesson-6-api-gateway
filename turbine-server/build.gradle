@@ -11,12 +11,11 @@ buildscript {
 }
 
 apply plugin: 'java'
-apply plugin: 'eclipse'
 apply plugin: 'idea'
 apply plugin: 'spring-boot'
 
 jar {
-	baseName = 'event-composite-service'
+	baseName = 'turbine-server'
 	version = '0.0.1-SNAPSHOT'
 }
 sourceCompatibility = 1.8
@@ -29,12 +28,11 @@ repositories {
 
 dependencies {
 	compile('org.springframework.boot:spring-boot-starter-web')
-	compile("org.springframework.boot:spring-boot-starter-hateoas")
 	compile('org.springframework.boot:spring-boot-starter-actuator')
 
-	compile('org.springframework.cloud:spring-cloud-starter-eureka')
-	compile("org.springframework.cloud:spring-cloud-starter-hystrix")
-	compile("org.springframework.cloud:spring-cloud-starter-hystrix-dashboard")
+	compile('org.springframework.cloud:spring-cloud-starter-hystrix')
+	compile('org.springframework.cloud:spring-cloud-starter-hystrix-dashboard')
+	compile('org.springframework.cloud:spring-cloud-starter-turbine')
 }
 
 dependencyManagement {

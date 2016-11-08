@@ -46,3 +46,8 @@ services:
       - "9030:9030"
     depends_on:
       - eureka-server
+  turbine-server:
+    build: turbine-server
+    restart: always
+    ports:
+      - "8030:8030"

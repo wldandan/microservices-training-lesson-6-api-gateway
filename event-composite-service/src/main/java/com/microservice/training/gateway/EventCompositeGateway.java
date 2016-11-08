@@ -4,6 +4,9 @@ import com.microservice.training.model.Event;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.microservice.training.model.Recommendation;
+import com.microservice.training.model.Review;
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +15,7 @@ import org.springframework.web.client.RestOperations;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Component
@@ -23,34 +27,33 @@ public class EventCompositeGateway {
     @Autowired
     private RestOperations restTemplate;
 
+    @HystrixCommand(fallbackMethod = "defaultEvent")
     public Event getEvent(String eventId) {
         return parseEvent(restTemplate.getForEntity(loadBalancer.choose("EVENT").getUri() + "/events/" + eventId, String.class));
     }
 
+    @HystrixCommand(fallbackMethod = "defaultRecommendations")
     public List getRecommendations(String eventId) {
-        ResponseEntity<String> resultStr = null;
-        try
-        {
-            resultStr = restTemplate.getForEntity(loadBalancer.choose("RECOMMENDATION").getUri() + "/recommendations?eventId=" + eventId, String.class);
-        }
-        catch (Exception e){}
-        if (null != resultStr){
-            return parseRecommends(resultStr);
-        }
-        return new ArrayList<>();
+        ResponseEntity<String> resultStr = restTemplate.getForEntity(loadBalancer.choose("RECOMMENDATION").getUri() + "/recommendations?eventId=" + eventId, String.class);
+        return parseRecommends(resultStr);
     }
 
+    @HystrixCommand(fallbackMethod = "defaultReviews")
     public List getReviews(String eventId) {
-        ResponseEntity<String> resultStr = null;
-        try
-        {
-            resultStr = restTemplate.getForEntity(loadBalancer.choose("REVIEW").getUri() + "/reviews?eventId=" + eventId, String.class);
-        }
-        catch (Exception e){}
-        if (null != resultStr){
-            return parseReviews(resultStr);
-        }
-        return new ArrayList<>();
+        ResponseEntity<String> resultStr = restTemplate.getForEntity(loadBalancer.choose("REVIEW").getUri() + "/reviews?eventId=" + eventId, String.class);
+        return parseReviews(resultStr);
+    }
+
+    private Event defaultEvent(String eventId) {
+        return new Event(eventId, "默认活动", 0, "", "无介绍", new Date(), new Date());
+    }
+
+    private List<Review> defaultReviews(String eventId) {
+        return new ArrayList<Review>(){{add(new Review(eventId, "0", "Fallback author", "Fallback subject", "Fallback content"));}};
+    }
+
+    private List<Recommendation> defaultRecommendations(String eventId) {
+        return new ArrayList<Recommendation>(){{add(new Recommendation(eventId, "0", "Fallback content"));}};
     }
 
     private Event parseEvent(ResponseEntity<String> resp) {

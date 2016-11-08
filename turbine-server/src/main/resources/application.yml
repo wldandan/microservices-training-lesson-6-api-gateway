@@ -12,8 +12,8 @@ info:
   component: Turbine
 
 turbine:
-  clusterNameExpression: new String("default")
-  appConfig: event-composite
+  appConfig: event-composite,api-gateway
+  clusterNameExpression: "'default'"
 
 ---
 spring:

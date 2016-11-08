@@ -38,7 +38,6 @@ services:
       - eureka-server
   event-composite-service:
     build: event-composite-service
-    restart: always
     environment:
       SPRING_PROFILES_ACTIVE: docker
     command: bash -c "wait-for-it -t 0 eureka-server:8010 && java -jar /app/event-composite-service-latest.jar"
@@ -46,8 +45,14 @@ services:
       - "9030:9030"
     depends_on:
       - eureka-server
-  turbine-server:
-    build: turbine-server
-    restart: always
+  # turbine-server:
+  #   build: turbine-server
+  #   restart: always
+  #   ports:
+  #     - "8030:8030"
+  api-gateway:
+    build: api-gateway
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
     ports:
-      - "8030:8030"
+      - "8040:8040"

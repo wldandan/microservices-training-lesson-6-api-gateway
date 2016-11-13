@@ -37,6 +37,6 @@ dependencies {
 
 dependencyManagement {
 	imports {
-		mavenBom "org.springframework.cloud:spring-cloud-dependencies:Brixton.SR6"
+		mavenBom "org.springframework.cloud:spring-cloud-dependencies:Camden.SR2"
 	}
 }

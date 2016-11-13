@@ -40,9 +40,10 @@ zuul:
   ignoredServices: "*"
   prefix: /api/v1
   routes:
-    event: /events/** #http://localhost:8040/api/events/events
-    review: /reviews/**
+    event: /events/** #http://localhost:8040/api/v1/events/events
+    review: /reviews/** #http://localhost:8040/api/v1/reviews/reviews
     event-composite: /composite/**
+    recommendation: /recommendations/**
 ---
 
 spring:

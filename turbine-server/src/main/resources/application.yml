@@ -1,6 +1,5 @@
 eureka:
   client:
-    registryFetchIntervalSeconds: 5
     leaseRenewalIntervalInSeconds: 5
     serviceUrl:
       defaultZone: http://localhost:8010/eureka/
@@ -19,6 +18,9 @@ turbine:
 spring:
   profiles: docker
 
+server:
+  port: 8030
+  
 eureka:
   client:
     serviceUrl:

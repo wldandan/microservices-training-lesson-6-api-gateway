@@ -18,24 +18,24 @@ services:
     depends_on:
       - mongo
       - eureka-server
-  review-service:
-    build: review-service
-    command: bash -c "wait-for-it -t 0 eureka-server:8010 && java -jar /app/review-service-latest.jar"
-    environment:
-      SPRING_PROFILES_ACTIVE: docker
-    ports:
-      - "9010:9010"
-    depends_on:
-      - eureka-server
-  recommendation-service:
-    build: recommendation-service
-    command: bash -c "wait-for-it eureka-server:8010 && java -jar /app/recommendation-service-latest.jar"
-    environment:
-      SPRING_PROFILES_ACTIVE: docker
-    ports:
-      - "9020:9020"
-    depends_on:
-      - eureka-server
+  # review-service:
+  #   build: review-service
+  #   command: bash -c "wait-for-it -t 0 eureka-server:8010 && java -jar /app/review-service-latest.jar"
+  #   environment:
+  #     SPRING_PROFILES_ACTIVE: docker
+  #   ports:
+  #     - "9010:9010"
+  #   depends_on:
+  #     - eureka-server
+  # recommendation-service:
+  #   build: recommendation-service
+  #   command: bash -c "wait-for-it eureka-server:8010 && java -jar /app/recommendation-service-latest.jar"
+  #   environment:
+  #     SPRING_PROFILES_ACTIVE: docker
+  #   ports:
+  #     - "9020:9020"
+  #   depends_on:
+  #     - eureka-server
   event-composite-service:
     build: event-composite-service
     environment:
@@ -45,14 +45,21 @@ services:
       - "9030:9030"
     depends_on:
       - eureka-server
-  # turbine-server:
-  #   build: turbine-server
-  #   restart: always
-  #   ports:
-  #     - "8030:8030"
+  turbine-server:
+    build: turbine-server
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+    command: bash -c "wait-for-it -t 0 eureka-server:8010 && java -jar /app/turbine-server-latest.jar" 
+    ports:
+      - "8030:8030"
+    depends_on:
+      - eureka-server
   api-gateway:
     build: api-gateway
     environment:
       SPRING_PROFILES_ACTIVE: docker
+    command: bash -c "wait-for-it -t 0 eureka-server:8010 && java -jar /app/api-gateway-latest.jar"  
     ports:
       - "8040:8040"
+    depends_on:
+      - eureka-server
